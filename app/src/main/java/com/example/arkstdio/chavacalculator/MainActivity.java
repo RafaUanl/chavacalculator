@@ -3,42 +3,121 @@ package com.example.arkstdio.chavacalculator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button one = (Button) findViewById(R.id.one);
+        one.setOnClickListener(this);
+        Button two = (Button) findViewById(R.id.two);
+        two.setOnClickListener(this);
+        Button three = (Button) findViewById(R.id.three);
+        three.setOnClickListener(this);
+        Button four = (Button) findViewById(R.id.four);
+        four.setOnClickListener(this);
+        Button five = (Button) findViewById(R.id.five);
+        five.setOnClickListener(this);
+        Button six = (Button) findViewById(R.id.six);
+        six.setOnClickListener(this);
+        Button seven = (Button) findViewById(R.id.seven);
+        seven.setOnClickListener(this);
+        Button eight = (Button) findViewById(R.id.eight);
+        eight.setOnClickListener(this);
+        Button nine = (Button) findViewById(R.id.nine);
+        nine.setOnClickListener(this);
+        Button cero = (Button) findViewById(R.id.zero);
+        cero.setOnClickListener(this);
+        Button point = (Button) findViewById(R.id.point);
+        point.setOnClickListener(this);
+
     }
 
+
+        @Override
+        public  void onClick(View v){
+        String response = "";
+        
+                switch (v.getId()){
+                    case R.id.one:
+                        response = "1";
+                        break;
+                    case R.id.two:
+                        response = "2";
+                        break;
+                    case R.id.three:
+                        response = "3";
+                        break;
+                    case R.id.four:
+                        response = "4";
+                        break;
+                    case R.id.five:
+                        response = "5";
+                        break;
+                    case R.id.six:
+                        response = "6";
+                        break;
+                    case R.id.seven:
+                        response = "7";
+                        break;
+                    case R.id.eight:
+                        response = "8";
+                        break;
+                    case R.id.nine:
+                        response = "9";
+                        break;
+                    case R.id.zero:
+                        response = "0";
+                        break;
+                    case  R.id.point:
+                        response = ".";
+                        break;
+
+
+            }
+
+                assignationValue(response);
+        }
+
+
+//   Global Variables
     double result = 0;
-    double firstNumber = 0;
-    double secondNumber = 0;
-    String showData = "0";
-    String operator = null;
+    String firstNumber = "", secondNumber = "", operator = null, showData = "0";
 
-
+//    Display the result of the operation
     private void displayResult(String message){
         TextView displayTextView = findViewById(R.id.display);
         displayTextView.setText(message);
 
     }
 
+//    Display all the data of the operation
     private void showHistory(String chain){
         TextView  historyTextView = findViewById(R.id.history);
         historyTextView.setText(chain);
     }
 
-
-    public void cleaner(View view){
-        result = 0;
-        firstNumber =0;
-        secondNumber = 0;
-        showData = "0";
+// Clean the data and the variables
+    public void cleaner(View v){
+        firstNumber = "";
+        secondNumber = "";
+        showData = "";
+        operator = null;
         displayResult(showData);
         showHistory(showData);
+        System.out.println("first " + firstNumber);
+        System.out.println("second " + secondNumber);
+        System.out.println("operator " + operator);
+        System.out.println("data " + showData);
+        System.out.println("Result " +result);
 
     }
 
@@ -48,11 +127,12 @@ public class MainActivity extends AppCompatActivity {
         String solution = String.valueOf(result);
         displayResult(solution);
         showHistory(histories);
-        firstNumber = result;
+        firstNumber = String.valueOf(result);
+        secondNumber = "";
     }
 
 
-    public String operation(View view){
+    public void operation(View view){
 
         switch (view.getId()){
             case R.id.plus:
@@ -70,61 +150,31 @@ public class MainActivity extends AppCompatActivity {
             case R.id.multiple:
                 operator = "*";
                 break;
-
-        }
-        return operator;
-    }
-
-    public void valueNumbers(View view){
-        int response;
-
-        switch (view.getId()){
-            case R.id.one:
-                response = 1;
-                break;
-            case R.id.two:
-                response = 2;
-                break;
-            case R.id.three:
-                response = 3;
-                break;
-            case R.id.four:
-                response = 4;
-                break;
-            case R.id.five:
-                response = 5;
-                break;
-            case R.id.six:
-                response = 6;
-                break;
-            case R.id.seven:
-                response = 7;
-                break;
-            case R.id.eight:
-                response = 8;
-                break;
-            case R.id.nine:
-                response = 9;
-                break;
-            default:
-                response = 0;
+            case R.id.module:
+                operator = "%";
                 break;
 
         }
 
-        assignationValue(response);
     }
 
-    private void assignationValue(double numberValue){
-        if(firstNumber > 0){
-            secondNumber = numberValue;
-        }else {
-            firstNumber = numberValue;
+    private void assignationValue(String numberValue){
+        if(operator != null){
+            secondNumber += numberValue;
+            displayResult(secondNumber);
+        }else{
+            firstNumber += numberValue;
+            displayResult(firstNumber);
         }
+        System.out.println(numberValue);
+
     }
 
-    private  double calculateResult(double first, double second, String operation){
-        double solution;
+    private  double calculateResult(String firstN, String secondN, String operation){
+        double solution, first,second;
+        first = Double.valueOf(firstN);
+        second = Double.valueOf(secondN);
+
 
         if(operation.equals("+")){
             solution = first + second;
@@ -132,7 +182,9 @@ public class MainActivity extends AppCompatActivity {
             solution = first - second;
         }else if(operation.equals("*")){
             solution = first * second;
-        }else{
+        }else if(operation.equals("%")){
+            solution = first % second;
+        } else{
             solution = first / second;
         }
 

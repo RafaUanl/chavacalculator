@@ -18,4 +18,6 @@
     <string name="clean">AC</string>
     <string name="delete">DEL</string>
     <string name="none"></string>
+    <string name="module">%</string>
+    <string name="point">.</string>
 </resources>
